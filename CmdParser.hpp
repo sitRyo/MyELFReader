@@ -23,7 +23,7 @@ namespace myelf {
     }
 
   public:
-    void
+    inline void
     setCmdOption(std::vector<CmdOptionData> const& cmdOptionMap) override {
       this->cmdOptionMap = cmdOptionMap;
     }
@@ -36,7 +36,11 @@ namespace myelf {
       // オプションが存在すれば "in"
       CmdOptionMap cmdOptionMap;
       for (auto& option : this->cmdOptionMap) {
-        cmdOptionMap.insert({option.longOption_, "in"});
+        std::string longOption = option.longOption_;
+        std::string value = option_register.get<std::string>(option.longOption_);
+        if (!value.empty()) {
+          cmdOptionMap.insert({option.longOption_, "in"});
+        }
       }
 
       return cmdOptionMap;
